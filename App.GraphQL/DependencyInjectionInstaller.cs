@@ -14,13 +14,9 @@ namespace App.GraphQL
 
     public class DependencyInjectionInstaller : Module
     {
-        public DbContextOptions<ApplicationDbContext> option { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule(new App.Services.DependencyInjectionInstaller()
-            {
-                option = this.option
-            });
+            builder.RegisterModule<App.Services.DependencyInjectionInstaller>();
             InstallerGraphQLServices(builder);
         }
         private void InstallerGraphQLServices(ContainerBuilder builder)

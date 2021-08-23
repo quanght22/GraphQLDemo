@@ -33,19 +33,15 @@ namespace GraphQLDemo
         {
             services.AddControllers();
 
-            var dbConnectionString = Configuration.GetConnectionString("DemoDBConnection");
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                options.UseSqlServer(dbConnectionString);
-            });
-
-            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(dbConnectionString);
             var containerBuilder = new ContainerBuilder();
-
-            containerBuilder.RegisterModule(new App.GraphQL.DependencyInjectionInstaller()
+            containerBuilder.Register(ctx =>
             {
-                option = optionsBuilder.Options
-            });
+                var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(Configuration.GetConnectionString("DemoDBConnection"));
+                return new ApplicationDbContext(optionsBuilder.Options);
+
+            }).As<ApplicationDbContext>().PropertiesAutowired().InstancePerLifetimeScope();
+
+            containerBuilder.RegisterModule<App.GraphQL.DependencyInjectionInstaller>();
             containerBuilder.RegisterType<GraphSchema>().As<ISchema>().SingleInstance();
             containerBuilder.RegisterType<DocumentWriter>().As<IDocumentWriter>().SingleInstance();
 

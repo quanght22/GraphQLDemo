@@ -9,13 +9,9 @@ namespace App.Services
 {
     public class DependencyInjectionInstaller : Module
     {
-        public DbContextOptions<ApplicationDbContext> option { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterModule(new App.Data.DependencyInjectionInstaller()
-            {
-                option = this.option
-            }); ;
+            builder.RegisterModule<App.Data.DependencyInjectionInstaller>();
             InstallerServices(builder);
         }
         private void InstallerServices(ContainerBuilder builder)

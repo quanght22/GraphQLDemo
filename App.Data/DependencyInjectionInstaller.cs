@@ -32,7 +32,6 @@ namespace App.Data
         //    });
         //    return services;
         //}
-        public DbContextOptions<ApplicationDbContext> option { get; set; }
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(ThisAssembly).Where(t => t.Name.EndsWith("Repository")).AsImplementedInterfaces();
